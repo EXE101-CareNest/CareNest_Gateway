@@ -1,0 +1,154 @@
+package com.exe.carenest.gateway.config;
+
+import com.exe.carenest.gateway.model.GatewayRoute;
+import com.exe.carenest.gateway.model.GatewayRouteRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.gateway.filter.FilterDefinition;
+import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
+import org.springframework.cloud.gateway.route.RouteDefinition;
+import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.cloud.gateway.route.builder.BooleanSpec;
+import org.springframework.cloud.gateway.route.builder.GatewayFilterSpec;
+import org.springframework.cloud.gateway.route.builder.PredicateSpec;
+import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
+
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+
+@Configuration
+public class DatabaseRouteLocator {
+
+    @Autowired
+    private GatewayRouteRepository routeRepository;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+
+    @Override
+    public Flux<RouteDefinition> getRouteDefinitions() {
+        return routeRepository.findAllByEnabled(true)
+                .map(this::convertToRouteDefinition)
+                .doOnError(e -> System.err.println("Error loading routes: " + e.getMessage()));
+    }
+    @Bean
+    public RouteLocator dynamicRoutes(RouteLocatorBuilder builder) {
+        // Get routes reactively and block for bean creation
+        List<GatewayRoute> dbRoutes = routeRepository.findAllByEnabled(true)
+            .collectList()
+            .block();
+            
+        RouteLocatorBuilder.Builder routes = builder.routes();
+        ObjectMapper mapper = new ObjectMapper();
+
+        for (GatewayRoute r : dbRoutes) {
+            try {
+                List<PredicateDefinition> predicates = mapper
+                        .readValue(r.getPredicates(), new TypeReference<List<PredicateDefinition>>() {});
+
+                List<FilterDefinition> filters = mapper
+                        .readValue(r.getFilters(), new TypeReference<List<FilterDefinition>>() {});
+
+                routes.route(r.getRouteId(), p -> {
+                    BooleanSpec spec = null;
+                    
+                    // Áp dụng predicate đầu tiên
+                    if (!predicates.isEmpty()) {
+                        spec = applyFirstPredicate(p, predicates.get(0));
+                        
+                        // Chain các predicates còn lại với AND
+                        for (int i = 1; i < predicates.size(); i++) {
+                            spec = spec.and().predicate(buildPredicate(predicates.get(i)));
+                        }
+                    } else {
+                        spec = p.path("/**");
+                    }
+
+                    // Áp dụng filters và URI
+                    return spec.filters(f -> {
+                        for (FilterDefinition filter : filters) {
+                             applyFilter(f, filter);
+                        }
+                        return f;
+                    }).uri(r.getUri());
+                });
+            } catch (JsonProcessingException e) {
+                System.err.println("Error parsing route " + r.getRouteId() + ": " + e.getMessage());
+            }
+        }
+
+        return routes.build();
+    }
+
+    // Sửa method này - trả về BooleanSpec thay vì PredicateSpec
+    private BooleanSpec applyFirstPredicate(PredicateSpec p, PredicateDefinition pred) {
+        String name = pred.getName();
+        Map<String, String> args = pred.getArgs();
+
+        return switch (name.toLowerCase()) {
+            case "path" -> p.path(args.get("pattern"));
+            case "host" -> p.host(args.get("pattern"));
+            case "method" -> p.method(args.get("method"));
+            case "header" -> p.header(args.get("name"), args.get("regexp"));
+            default -> p.path("/**"); // fallback
+        };
+    }
+
+    // Hàm build predicate cho chain
+    private Predicate<ServerWebExchange> buildPredicate(PredicateDefinition pred) {
+        String name = pred.getName();
+        Map<String, String> args = pred.getArgs();
+
+        return switch (name.toLowerCase()) {
+            case "path" -> {
+                String pattern = args.get("pattern");
+                yield exchange -> {
+                    String path = exchange.getRequest().getURI().getPath();
+                    return path.matches(pattern.replace("**", ".*"));
+                };
+            }
+            case "host" -> {
+                String hostPattern = args.get("pattern");
+                yield exchange -> {
+                    String host = exchange.getRequest().getHeaders().getFirst("Host");
+                    return host != null && host.matches(hostPattern.replace("*", ".*"));
+                };
+            }
+            default -> exchange -> true; // allow all
+        };
+    }
+
+    // Hàm áp dụng filter
+    private void applyFilter(GatewayFilterSpec f, FilterDefinition filter) {
+        String name = filter.getName();
+        Map<String, String> args = filter.getArgs();
+
+        switch (name.toLowerCase()) {
+            case "stripprefix":
+                f.stripPrefix(Integer.parseInt(args.get("parts")));
+                break;
+            case "addrequestheader":
+                f.addRequestHeader(args.get("name"), args.get("value"));
+                break;
+            case "removerequestheader":
+                f.removeRequestHeader(args.get("name"));
+                break;
+            case "retry":
+                f.retry(r -> r.setRetries(Integer.parseInt(args.get("retries"))));
+                break;
+            default:
+                break;
+        }
+    }
+}
