@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "J7jkA0ePmi0=",
+  "dgSpecHash": "S4xWdYelO8A=",
   "success": true,
-  "projectFilePath": "D:\\CareNest\\CareNest_Shop\\ApiGateway\\ApiGateway\\ApiGateway.csproj",
+  "projectFilePath": "D:\\CareNest\\ApiGateway\\ApiGateway\\ApiGateway.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\hoang\\.nuget\\packages\\fluentvalidation\\11.11.0\\fluentvalidation.11.11.0.nupkg.sha512",
     "C:\\Users\\hoang\\.nuget\\packages\\ipaddressrange\\6.2.0\\ipaddressrange.6.2.0.nupkg.sha512",
