@@ -1,0 +1,31 @@
+services:
+  gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: carenest-gateway:latest
+    container_name: carenest-gateway
+    ports:
+      - "8099:8099"
+    environment:
+      # Spring configuration
+      - SPRING_APPLICATION_NAME=gateway
+      - SERVER_PORT=8099
+      - SPRING_PROFILES_ACTIVE=default
+      # Eureka URL (change to your Eureka host if not localhost)
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://host.docker.internal:8761/eureka/
+      # Logging level example (optional)
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_GATEWAY=DEBUG
+      # JVM options (can be overridden)
+      - JAVA_OPTS=-XX:MaxRAMPercentage=75 -XX:+UseContainerSupport -Djava.security.egd=file:/dev/./urandom
+    networks:
+      carenest-network:
+        ipv4_address: 192.168.0.20
+    restart: unless-stopped
+    # Uncomment if you have a compose service named 'eureka'
+    # depends_on:
+    #   - eureka
+
+networks:
+  carenest-network:
+    external: true
