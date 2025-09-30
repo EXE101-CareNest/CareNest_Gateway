@@ -20,7 +20,7 @@ services:
       - JAVA_OPTS=-XX:MaxRAMPercentage=75 -XX:+UseContainerSupport -Djava.security.egd=file:/dev/./urandom
     networks:
       carenest-network:
-        ipv4_address: 192.168.0.20
+        ipv4_address: 192.168.0.21
     restart: unless-stopped
     # Uncomment if you have a compose service named 'eureka'
     # depends_on:
