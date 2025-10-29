@@ -1,0 +1,20 @@
+services:
+  gatewayapi:
+    image: gateway-api-dev:latest
+    restart: always
+    build:
+      context: ./ApiGateway
+      dockerfile: Dockerfile
+    ports:
+      - "7000:80"
+    container_name: gateway-api-dev
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    networks:
+      carenest-network:
+        ipv4_address: 192.168.0.30
+
+networks:
+  carenest-network:
+    external: true
