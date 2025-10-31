@@ -5,8 +5,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8023
+          "Host": "#{ADDRESS_SERVICE_HOST}",
+          "Port": "#{ADDRESS_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/address/{everything}",
@@ -17,8 +17,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8013
+          "Host": "#{APPOINTMENT_SERVICE_HOST}",
+          "Port": "#{APPOINTMENT_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/appointment/{everything}",
@@ -29,8 +29,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8014
+          "Host": "#{APPOINTMENTDETAIL_SERVICE_HOST}",
+          "Port": "#{APPOINTMENTDETAIL_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/appointmentdetail/{everything}",
@@ -41,8 +41,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8017
+          "Host": "#{BRANCHES_SERVICE_HOST}",
+          "Port": "#{BRANCHES_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/branches/{everything}",
@@ -53,20 +53,20 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8021
+          "Host": "#{ORDER_SERVICE_HOST}",
+          "Port": "#{ORDER_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/order/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete", "Options" ]
     },
     {
-      "DownstreamPathTemplate": "/api/orderdetail/{everything}",
+      "DownstreamPathTemplate": "/api/order/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8022
+          "Host": "#{ORDERDETAIL_SERVICE_HOST}",
+          "Port": "#{ORDERDETAIL_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/orderdetail/{everything}",
@@ -77,8 +77,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8016
+          "Host": "#{PRODUCTS_SERVICE_HOST}",
+          "Port": "#{PRODUCTS_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/products/{everything}",
@@ -89,8 +89,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8026
+          "Host": "#{PAY_SERVICE_HOST}",
+          "Port": "#{PAY_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/pay/{everything}",
@@ -101,8 +101,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8026
+          "Host": "#{PAY_SERVICE_HOST}",
+          "Port": "#{PAY_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/payment/{everything}",
@@ -113,8 +113,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8026
+          "Host": "#{PAY_SERVICE_HOST}",
+          "Port": "#{PAY_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/sepay/{everything}",
@@ -125,8 +125,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8018
+          "Host": "#{SERVICE_SERVICE_HOST}",
+          "Port": "#{SERVICE_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/service/{everything}",
@@ -137,8 +137,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8019
+          "Host": "#{SERVICECATEGORY_SERVICE_HOST}",
+          "Port": "#{SERVICECATEGORY_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/servicecategory/{everything}",
@@ -149,8 +149,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8020
+          "Host": "#{SERVICEDETAIL_SERVICE_HOST}",
+          "Port": "#{SERVICEDETAIL_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/servicedetail/{everything}",
@@ -161,8 +161,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8015
+          "Host": "#{SHOP_SERVICE_HOST}",
+          "Port": "#{SHOP_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/shop/{everything}",
@@ -173,8 +173,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8024
+          "Host": "#{REVIEW_SERVICE_HOST}",
+          "Port": "#{REVIEW_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/review/{everything}",
@@ -185,8 +185,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8082
+          "Host": "#{AUTH_SERVICE_HOST}",
+          "Port": "#{AUTH_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/admin/{everything}",
@@ -197,8 +197,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8082
+          "Host": "#{AUTH_SERVICE_HOST}",
+          "Port": "#{AUTH_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/auth/{everything}",
@@ -305,8 +305,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8087
+          "Host": "#{PET_SERVICE_HOST}",
+          "Port": "#{PET_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/pet/{everything}",
@@ -329,8 +329,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "host.docker.internal",
-          "Port": 8086
+          "Host": "#{BLOG_SERVICE_HOST}",
+          "Port": "#{BLOG_SERVICE_PORT}"
         }
       ],
       "UpstreamPathTemplate": "/v1/{everything}",
@@ -338,7 +338,7 @@
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:7000",
+    "BaseUrl": "#{GATEWAY_BASE_URL}",
     "CorsOptions": {
       "AllowCredentials": true,
       "AllowedHeaders": ["*"],
