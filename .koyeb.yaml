@@ -1,0 +1,15 @@
+type: dockerfile
+dockerfile: ApiGateway/Dockerfile
+dockerfile_context: ApiGateway
+port: 80
+healthcheck:
+  path: /
+  interval: 30
+  timeout: 10
+  initial_delay: 40
+env:
+  - name: ASPNETCORE_ENVIRONMENT
+    value: Production
+  - name: ASPNETCORE_URLS
+    value: http://+:80
+

@@ -20,11 +20,18 @@ RUN dotnet publish "ApiGateway.csproj" -c Release -o /app/publish /p:UseAppHost=
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 
+# Install bash và sed cho entrypoint script
+RUN apt-get update && apt-get install -y bash sed && rm -rf /var/lib/apt/lists/*
+
 # Copy the published app
 COPY --from=publish /app/publish .
+
+# Copy entrypoint script
+COPY docker-entrypoint.sh /app/
+RUN chmod +x /app/docker-entrypoint.sh
 
 # Expose port 80
 EXPOSE 80
 
 # Set the entry point
-ENTRYPOINT ["dotnet", "ApiGateway.dll"]
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
