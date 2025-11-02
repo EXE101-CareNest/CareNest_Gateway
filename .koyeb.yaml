@@ -1,6 +1,5 @@
 type: dockerfile
-dockerfile: ApiGateway/Dockerfile
-dockerfile_context: ApiGateway
+dockerfile: Dockerfile
 port: 80
 healthcheck:
   path: /

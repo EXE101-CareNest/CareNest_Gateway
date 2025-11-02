@@ -28,11 +28,12 @@ git push origin main
 
 Trong phần **Build Settings**:
 - **Build Command**: Để trống (Koyeb sẽ tự động detect Dockerfile)
-- **Dockerfile Path**: `ApiGateway/Dockerfile`
-- **Dockerfile Context**: `ApiGateway` (nếu cần)
+- **Dockerfile Path**: `Dockerfile` (file ở root)
+- **Hoặc**: Nếu không có file `.koyeb.yaml`, bạn có thể chỉ định:
+  - **Dockerfile Path**: `ApiGateway/Dockerfile`
+  - **Build Context**: `.` (root của repository)
 
-Hoặc nếu sử dụng file `.koyeb.yaml`:
-- Koyeb sẽ tự động detect và sử dụng file `.koyeb.yaml` trong repository
+**Lưu ý**: File `.koyeb.yaml` đã được cấu hình sẵn, Koyeb sẽ tự động sử dụng nó
 
 ### Bước 4: Cấu hình Environment Variables (Biến môi trường)
 
